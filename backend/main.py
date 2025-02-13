@@ -7,6 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.controllers.auth_controller import router as auth_router
 from src.controllers.users_controller import router as users_router
+from src.controllers.product_controller import router as product_router
+from src.controllers.category_controller import router as category_router
 
 app = FastAPI()
 
@@ -28,6 +30,12 @@ app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 # Usuarios
 app.include_router(users_router, prefix="/users", tags=["usuarios"])
+
+# Productos
+app.include_router(product_router, prefix="/products", tags=["productos"])
+
+# Categorias
+app.include_router(category_router, prefix="/categories", tags=["categorias"])
 
 # Personalizar el esquema de seguridad en OpenAPI para usar Bearer tokens
 def custom_openapi():

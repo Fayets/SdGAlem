@@ -21,7 +21,6 @@ class UserCreate(BaseUser):
 
 # Modelo de entrada
 
-
 class LoginRequest(BaseModel):
     username: str | None = None
     email: str | None = None
@@ -29,3 +28,35 @@ class LoginRequest(BaseModel):
 
 class TokenVerificationRequest(BaseModel):
     token: str
+
+class ProductCreate(BaseModel):
+    codigo: str
+    nombre: str
+    categoria_id: int  # ID de la categoría
+    precio_costo: float
+    precio_venta: float
+    stock: int
+    stock_minimo: int    
+
+class CategoryBase(BaseModel):
+    id: int
+    name: str
+
+class ProductResponse(BaseModel):
+    id: int
+    codigo: str
+    nombre: str
+    categoria: CategoryBase | None  # Permite que la categoría sea opcional y sea un objeto completo
+    precio_costo: float
+    precio_venta: float
+    stock: int
+    stock_minimo: int
+
+    class Config:
+        from_attributes = True
+
+class CategoryCreate(BaseModel):
+    name: str
+
+class CategoryResponse(BaseModel):
+   name: str
