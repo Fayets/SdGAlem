@@ -3,6 +3,8 @@ from typing import List
 from src.models import Roles
 
 
+
+
 class BaseUser(BaseModel):
     username: str
     email: str
@@ -60,3 +62,4 @@ class CategoryCreate(BaseModel):
 
 class CategoryResponse(BaseModel):
    name: str
+   id:int

@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import ProductList from './components/ProductList'; 
 import ProductForm from './components/RegisterProduct';
 
+
 function App() {
   return (
     <Router>
@@ -13,6 +14,9 @@ function App() {
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Stock" element={<ProductList />} />  
         <Route path="/Stock/New" element={<ProductForm />} />
+        
+        <Route path="/register-product" element={<ProductForm />} />
+  
       </Routes>
     </Router>
   );

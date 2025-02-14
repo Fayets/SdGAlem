@@ -15,7 +15,7 @@ router = APIRouter()
 service = UsersService()
 
 SECRET_KEY = config("SECRET")
-ACCESS_TOKEN_DURATION = 30  # Aumentado a 30 minutos
+ACCESS_TOKEN_DURATION = 60  # Aumentado a 60 minutos
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
