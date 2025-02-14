@@ -4,6 +4,8 @@ from src import schemas
 from src.services.category_services import CategoryService
 from src.controllers.auth_controller import get_current_user
 from pydantic import BaseModel
+from typing import List
+
 
 # Category controller
 
@@ -50,6 +52,16 @@ def update_category(categoria_id: int, category_update: schemas.CategoryCreate, 
     except Exception as e:
         print(f"Error inesperado al actualizar la categoría: {e}")
         return {"message": "Error inesperado al actualizar la categoría.", "success": False}
+
+@router.get("/all", response_model=List[schemas.CategoryResponse])
+def get_all_categories(current_user=Depends(get_current_user)):
+    try:
+        categories = service.get_all_categories()  # Usamos el método del servicio para obtener todas las categorías
+        return categories
+    except Exception as e:
+        print(f"Error inesperado al obtener las categorías: {e}")
+        raise HTTPException(status_code=500, detail="Error al obtener las categorías.")
+
 
 
 @router.get("/get/{categoria_id}", response_model=schemas.CategoryResponse)

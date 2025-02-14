@@ -24,6 +24,30 @@ class CategoryService:
             # Buscar la categoría por nombre
             category = models.Category.get(nombre=nombre)
             return category
+    
+    def get_all_categories(self):
+        with db_session:
+            try:
+                # Obtener todas las categorías
+                categories = list(models.Category.select())
+                
+                category_list = []
+                for category in categories:
+                    category_dict = {
+                        "id": category.id,
+                        "name": category.name,
+                    }
+                    category_list.append(category_dict)
+                
+                if not category_list:
+                    raise HTTPException(status_code=404, detail="No hay categorías disponibles")
+                
+                return category_list
+                
+            except Exception as e:
+                print(f"Error al obtener las categorías: {e}")
+                raise HTTPException(status_code=500, detail="Error inesperado al obtener las categorías")
+
 
     def create_category(self, category_data: CategoryCreate):
         with db_session:

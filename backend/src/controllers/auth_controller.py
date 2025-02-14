@@ -87,7 +87,7 @@ async def register(user: schemas.UserCreate):
 
 
 @router.post("/login")
-async def login(request: schemas.LoginRequest = Depends()):
+async def login(request: schemas.LoginRequest):
     """ Autenticación del usuario y generación de token """
     username = request.username
     email = request.email
@@ -96,6 +96,7 @@ async def login(request: schemas.LoginRequest = Depends()):
     if not username and not email:
         raise HTTPException(status_code=400, detail="Se requiere un nombre de usuario o un email")
 
+    # Buscar el usuario con el servicio
     user = service.search_user(username=username, email=email, password=password)
 
     access_token = {
@@ -109,7 +110,6 @@ async def login(request: schemas.LoginRequest = Depends()):
         "access_token": jwt.encode(access_token, key=SECRET_KEY, algorithm="HS256"),
         "token_type": "bearer"
     }
-
 
 
 

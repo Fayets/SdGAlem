@@ -1,24 +1,51 @@
 import React from 'react'
-import logo from '../images/logo.jpeg'
-import img1 from '../images/inventary.jpeg'
-import img2 from '../images/sale.jpeg'
-import img3 from '../images/reports.jpeg'
-import img4 from '../images/tarjets.jpeg'
+import { ShoppingBag, Package, FileText, CreditCard } from "lucide-react"
+import { useNavigate } from 'react-router-dom'  // Importa useNavigate
+import logo from "../images/logo.jpeg"
 
+const modules = [
+  { name: "Ventas", icon: ShoppingBag },
+  { name: "Inventario", icon: Package },
+  { name: "Reportes", icon: FileText },
+  { name: "Créditos Personales", icon: CreditCard },
+]
 
 const Dashboard = () => {
+  const navigate = useNavigate(); // Inicializa useNavigate
+
+  const handleNavigate = (moduleName) => {
+    if (moduleName === "Inventario") {
+      navigate("/stock");  // Redirige a /inventario
+    }
+  }
+
   return (
     <>
-    <div className='bg-black h-14 flex items-center px-4'> 
-        <img src={logo} className="h-14 w-14 mr-4"/> 
-        <p className='text-white flex-1 text-center'>bienvenidos a astro</p> 
-
-    </div>
-    <div className='grid grid-cols-2 gap-2 h-screen m-auto  bg-white'>
-        <div className='m-auto border-8 w-52 h-52 flex items-center justify-center'><img src={img1} className='h-full'/></div>
-        <div className='m-auto border-8 w-52 h-52 flex items-center justify-center'><img src={img2} className='h-full'/></div>
-        <div className='m-auto border-8 w-52 h-52 flex items-center justify-center'><img src={img3} className='h-full'/></div>
-        <div className='m-auto border-8 w-52 h-52 flex items-center justify-center'><img src={img4} className='h-full'/></div>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-12">
+          <img
+            src={logo}
+            alt="Logo de la empresa"
+            width={150}
+            height={50}
+            className="w-auto h-12"
+          />
+          <h1 className="text-3xl font-bold text-gray-800">Dashboard de Negocio</h1>
+        </div>
+        <div className="grid grid-cols-2 gap-8 mt-8">
+          {modules.map((module) => (
+            <button
+              key={module.name}
+              className="flex flex-col items-center justify-center bg-blue-50 p-12 rounded-xl shadow-md hover:shadow-lg hover:bg-blue-100 transition-all duration-300 ease-in-out"
+              onClick={() => handleNavigate(module.name)} // Asigna la acción al clic
+            >
+              <module.icon className="w-24 h-24 text-blue-600 mb-6" />
+              <span className="text-xl font-medium text-gray-800">{module.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
     </>
   )
