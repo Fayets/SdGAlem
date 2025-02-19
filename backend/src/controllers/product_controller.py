@@ -11,10 +11,6 @@ from typing import List
 router = APIRouter()
 service = ProductServices()  # Servicio que contiene la lógica de negocio
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 class RegisterMessage(BaseModel):
     message: str
     success: bool
@@ -23,10 +19,6 @@ class RegisterMessage(BaseModel):
 @router.post("/register", response_model=RegisterMessage, status_code=201)
 def register_product(product: schemas.ProductCreate, current_user=Depends(get_current_user)):
     try:
-<<<<<<< HEAD
-=======
-        # Asegúrate de que el nombre del método coincide aquí
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
         product_created = service.create_producto(product)
         return {
             "message": "Producto creado correctamente",
@@ -55,15 +47,8 @@ def update_product(codigo: str, product_update: schemas.ProductCreate, current_u
         update_result = service.update_product(codigo, product_update)
         return {"message": update_result["message"], "success": True}
     except HTTPException as e:
-<<<<<<< HEAD
         return {"message": e.detail, "success": False}
     except Exception as e:
-=======
-        print(f"HTTPException: {e.detail}")
-        return {"message": e.detail, "success": False}
-    except Exception as e:
-        print(f"Error inesperado al actualizar el producto: {e}")
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
         return {"message": "Error inesperado al actualizar el producto.", "success": False}
 
 
@@ -73,21 +58,12 @@ def get_product(codigo: str, current_user=Depends(get_current_user)):
         product_data = service.get_product_by_code(codigo)
         return product_data
     except HTTPException as e:
-<<<<<<< HEAD
         raise e
     except Exception as e:
         raise HTTPException(
             status_code=500, detail="Error inesperado al obtener el producto."
         )
 
-=======
-        print(f"HTTPException: {e.detail}")
-        raise e
-    except Exception as e:
-        print(f"Error inesperado al obtener el producto: {e}")
-        raise HTTPException(
-            status_code=500, detail="Error inesperado al obtener el producto.")
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 @router.get("/all", response_model=List[schemas.ProductResponse])
 def get_all_products(current_user=Depends(get_current_user)):
@@ -95,19 +71,11 @@ def get_all_products(current_user=Depends(get_current_user)):
         all_products = service.get_all_products()
         return all_products
     except HTTPException as e:
-<<<<<<< HEAD
         raise e
     except Exception as e:
         raise HTTPException(
             status_code=500, detail="Error inesperado al obtener los productos."
         )
-=======
-        print(f"HTTPException: {e.detail}")
-        raise e
-    except Exception as e:
-        print(f"Error inesperado al obtener los productos: {e}")
-        raise HTTPException(status_code=500, detail="Error inesperado al obtener los productos.")
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 
 @router.delete("/{codigo}", status_code=200)
@@ -118,7 +86,6 @@ def delete_product(codigo: str, current_user=Depends(get_current_user)):
     except HTTPException as e:
         return {"message": e.detail, "success": False}
     except Exception as e:
-<<<<<<< HEAD
         return {
             "message": "Error inesperado al eliminar el producto.",
             "success": False,
@@ -190,8 +157,3 @@ def low_stock_count(current_user=Depends(get_current_user)):
         raise HTTPException(
             status_code=500, detail="Error inesperado al obtener la cantidad de productos con stock bajo."
         )
-=======
-        print(f"Error inesperado al eliminar el producto: {e}")
-        return {"message": "Error inesperado al eliminar el producto.", "success": False}
-
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6

@@ -250,7 +250,7 @@ export default function ProductList() {
                 <td className="px-6 py-4 whitespace-nowrap flex items-center">
                   <button className="mr-4"><FaEye /></button>
                   <button className="mr-4"><CiEdit /></button>
-                  <button><MdDelete /> </button>
+                  <button onClick={EliminarProducto()}><MdDelete /> </button>
                 </td>
               </tr>
             ))}
