@@ -1,10 +1,27 @@
+<<<<<<< HEAD
 from pony.orm import db_session, desc, select, sum
+=======
+from pony.orm import db_session, desc, select
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 from fastapi import HTTPException, Query
 from typing import Optional
 from pony.orm.core import TransactionIntegrityError
 from src import models, schemas
 from src.schemas import ProductCreate
+<<<<<<< HEAD
 import traceback
+=======
+
+
+class ProductServices:
+    def __init__(self):
+        pass 
+
+    from pony.orm import db_session, select
+from fastapi import HTTPException
+from src import models, schemas
+from pony.orm.core import TransactionIntegrityError
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 
 class ProductServices:
@@ -135,6 +152,7 @@ class ProductServices:
             except Exception as e:
                 print(f"Error al eliminar el producto: {e}")
                 raise HTTPException(status_code=500, detail="Error inesperado al eliminar el producto.")
+<<<<<<< HEAD
             
     def adjust_stock(self, codigo: str, cantidad: int) -> dict:
             with db_session:
@@ -227,5 +245,7 @@ class ProductServices:
 
 
 
+=======
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 

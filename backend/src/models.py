@@ -2,7 +2,10 @@ import uuid
 from pony.orm import *
 from enum import Enum
 from .db import db
+<<<<<<< HEAD
 from datetime import datetime
+=======
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 class Roles(str, Enum): 
     ADMIN = "ADMIN"
@@ -33,6 +36,7 @@ class Product(db.Entity):
     precio_costo = Required(float)
     precio_venta = Required(float)
     stock = Required(int, default=0)  
+<<<<<<< HEAD
     stock_minimo = Required(int, default=0)   # Campo para definir el límite mínimo de stock
     detalles_venta = Set("DetalleVenta")  # Relación inversa con DetalleVenta
     _table_ = "Products"
@@ -70,3 +74,10 @@ class Cliente(db.Entity):
     ventas = Set(Venta)
     creditos = Set(Credito)
     _table_ = "Clientes"
+=======
+    stock_minimo = Required(int, default=0)   #campo para definir el límite mínimo de stock
+    _table_ = "Products"
+
+
+ 
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6

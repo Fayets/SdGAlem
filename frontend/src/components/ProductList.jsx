@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Package, List, PlusCircle, AlertCircle, BarChart2, Search, Filter } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import { CiEdit } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2"; 
+
 
 
 
@@ -81,6 +83,7 @@ export default function ProductList() {
     );
   }
 
+
   const handleAgregarCategoria = async () => {
     if (!nuevaCategoria.trim()) {
       alert("El nombre de la categoría no puede estar vacío.");
@@ -89,18 +92,22 @@ export default function ProductList() {
 
     try {
       await axios.post(
-        "http://localhost:8000/categories/register",
-        { name: nuevaCategoria },
-        { headers: { Authorization: `Bearer ${token}` } }
+
+        "http://localhost:8000/categories/register", 
+        { name: nuevaCategoria },  
+        { headers: { Authorization: `Bearer ${token}` } } 
       );
+
       alert("Categoría agregada correctamente");
       setNuevaCategoria(""); 
-      setMostrarInput(false);
+      setMostrarInput(false); 
+
     } catch (error) {
       console.error("Error al agregar categoría:", error);
       alert("Hubo un error al agregar la categoría.");
     }
   };
+<<<<<<< HEAD
   const deleteCategory = (categoria_id) => {
     console.log("ID de la categoría a eliminar:", categoria_id); 
     if (!categoria_id) {
@@ -123,6 +130,41 @@ export default function ProductList() {
       });
   };
   
+=======
+
+
+  // Cargar productos desde el backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/products/all", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchProducts();
+    } else {
+      console.error("Token not found");
+    }
+  }, [token]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-72 h-72 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -150,6 +192,7 @@ export default function ProductList() {
         <div className="flex justify-between mb-6">
           <div className="flex gap-4">
             <div className="relative">
+<<<<<<< HEAD
               <input
                 type="text"
                 placeholder="Busca por nombre o letra..."
@@ -158,6 +201,10 @@ export default function ProductList() {
                 className="border p-2 rounded w-64"
               />
              
+=======
+              <input type="text" placeholder="Buscar productos..." className="pl-10 pr-4 py-2 border rounded-md" />
+              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
             </div>
             <button className="flex items-center gap-2 px-4 py-2 bg-white border rounded-md">
               <Filter className="h-5 w-5" />
@@ -166,6 +213,10 @@ export default function ProductList() {
           </div>
 
           <div className="flex items-center">
+<<<<<<< HEAD
+=======
+            {/* Botón para mostrar input de categoría */}
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
             <button
               className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md mr-2"
               onClick={() => setMostrarInput(!mostrarInput)}
@@ -173,6 +224,10 @@ export default function ProductList() {
               {mostrarInput ? "Cerrar" : "Agregar Categoría"}
             </button>
 
+<<<<<<< HEAD
+=======
+            {/* Input para agregar categoría */}
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
             {mostrarInput && (
               <div className="relative ml-2 flex items-center">
                 <input
@@ -184,6 +239,7 @@ export default function ProductList() {
                 />
 
                 <button
+<<<<<<< HEAD
                   className="ml-2 mr-2 px-4 py-2 bg-green-600 text-white rounded-md"
                   onClick={handleAgregarCategoria}
                 >
@@ -218,6 +274,20 @@ export default function ProductList() {
   </button>
 </div>
              
+=======
+                    className="ml-2 mr-2 px-4 py-2 bg-green-600 text-white rounded-md"
+                    onClick={handleAgregarCategoria} // Llamar a la función que envía los datos
+                  >
+                    Guardar
+                </button>
+              </div>
+            )}
+
+            <button className="cursor-pointer px-4 py-2 bg-yellow-600 text-white rounded-md mr-2">Editar Categoría</button>
+            <button className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md" onClick={() => navigate("/register-product")}>
+              Agregar Producto
+            </button>
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
           </div>
         </div>
 
@@ -234,7 +304,11 @@ export default function ProductList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
+<<<<<<< HEAD
             {filteredProducts.map((product) => (
+=======
+            {products.map((product) => (
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
               <tr key={product.codigo}>
                 <td className="px-6 py-4 whitespace-nowrap">{product.codigo}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{product.nombre}</td>
@@ -242,9 +316,14 @@ export default function ProductList() {
                 <td className="px-6 py-4 whitespace-nowrap">{product.stock}</td>
                 <td className="px-6 py-4 whitespace-nowrap">${product.precio_venta}</td>
                 <td className="px-6 py-4 whitespace-nowrap flex items-center">
+<<<<<<< HEAD
                   <button className="mr-4"><FaEye /></button>
                   <button className="mr-4"><CiEdit /></button>
                   <button><MdDelete /> </button>
+=======
+                  <button className="mr-4">Ver</button>
+                  <button>Editar</button>
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
                 </td>
               </tr>
             ))}

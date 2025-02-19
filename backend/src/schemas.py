@@ -1,9 +1,17 @@
 from pydantic import BaseModel
 from typing import List
+<<<<<<< HEAD
 from datetime import datetime
 from src.models import Roles
 
 #USUARIOS
+=======
+from src.models import Roles
+
+
+
+
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 class BaseUser(BaseModel):
     username: str
     email: str
@@ -12,6 +20,10 @@ class BaseUser(BaseModel):
     role: Roles
 
     class Config:
+<<<<<<< HEAD
+=======
+        # antes orm_mode=True
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
         from_attributes = True
         use_enum_values = True
 
@@ -19,7 +31,12 @@ class BaseUser(BaseModel):
 class UserCreate(BaseUser):
     password: str
 
+<<<<<<< HEAD
 #LOGIN
+=======
+# Modelo de entrada
+
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 class LoginRequest(BaseModel):
     username: str | None = None
     email: str | None = None
@@ -28,7 +45,10 @@ class LoginRequest(BaseModel):
 class TokenVerificationRequest(BaseModel):
     token: str
 
+<<<<<<< HEAD
 #PRODUCTOS  
+=======
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 class ProductCreate(BaseModel):
     codigo: str
     nombre: str
@@ -55,13 +75,17 @@ class ProductResponse(BaseModel):
     class Config:
         from_attributes = True
 
+<<<<<<< HEAD
 #CATEGORIAS
+=======
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 class CategoryCreate(BaseModel):
     name: str
 
 class CategoryResponse(BaseModel):
    name: str
    id:int
+<<<<<<< HEAD
 
 class StockAdjustMessage(BaseModel):
     message: str
@@ -96,3 +120,5 @@ class StockAdjustMessage(BaseModel):
 #     fecha: datetime
 #     productos: List[SaleProduct]
 
+=======
+>>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
