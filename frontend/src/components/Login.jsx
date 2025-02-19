@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../images/logo.jpeg";
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -48,7 +49,12 @@ const Login = () => {
   
     } catch (error) {
       console.error("Error al logear:", error.response?.data || error.message);
-      alert(`Error: ${error.response?.data?.message || error.message}`);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Las credenciales son incorrectas',
+        icon: 'error',
+        confirmButtonText: 'Reintentar'
+      })
     }
   };
   
@@ -104,21 +110,10 @@ const Login = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Recordarme
-              </label>
+              
+              
             </div>
-            <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
+            
           </div>
 
           <div>
