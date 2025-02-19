@@ -9,10 +9,7 @@ from src.controllers.auth_controller import router as auth_router
 from src.controllers.users_controller import router as users_router
 from src.controllers.product_controller import router as product_router
 from src.controllers.category_controller import router as category_router
-<<<<<<< HEAD
 #from src.controllers.sale_controller import router as sale_router
-=======
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 
 app = FastAPI()
 
@@ -41,12 +38,9 @@ app.include_router(product_router, prefix="/products", tags=["productos"])
 # Categorias
 app.include_router(category_router, prefix="/categories", tags=["categorias"])
 
-<<<<<<< HEAD
 #Ventas
 #app.include_router(sale_router, prefix="/sales", tags=["ventas"])
 
-=======
->>>>>>> 405771247fff7b4b255287220e9baf1ee23150f6
 # Personalizar el esquema de seguridad en OpenAPI para usar Bearer tokens
 def custom_openapi():
     if app.openapi_schema:
