@@ -6,8 +6,6 @@ from datetime import datetime
 
 class Roles(str, Enum): 
     ADMIN = "ADMIN"
-    STUDENT = "STUDENT"
-    TEACHER = "TEACHER"
 
 class User(db.Entity):
     id = PrimaryKey(uuid.UUID, auto=True)
@@ -34,7 +32,6 @@ class Product(db.Entity):
     precio_venta = Required(float)
     stock = Required(int, default=0)  
     stock_minimo = Required(int, default=0)   # Campo para definir el límite mínimo de stock
-    detalles_venta = Set("DetalleVenta")  # Relación inversa con DetalleVenta
     _table_ = "Products"
 
 class Venta(db.Entity):
@@ -50,7 +47,6 @@ class Venta(db.Entity):
 class DetalleVenta(db.Entity):
     id = PrimaryKey(int, auto=True)
     venta = Required(Venta)
-    producto = Required(Product)
     cantidad = Required(int)
     subtotal = Required(float)
     _table_ = "DetallesVenta"

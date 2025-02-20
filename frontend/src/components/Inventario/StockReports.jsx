@@ -102,8 +102,7 @@ export default function StockReports() {
             <select className="border rounded-md px-3 py-2">
               <option>Seleccionar tipo de reporte</option>
               <option>Inventario Actual</option>
-              <option>Movimientos de Stock</option>
-              <option>Productos con Stock Bajo</option>
+            
             </select>
             <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md">
               <Printer className="h-5 w-5" />

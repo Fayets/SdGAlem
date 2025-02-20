@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Package, List, PlusCircle, AlertCircle, BarChart2, Search, Filter } from "lucide-react";
+import {
+  Package,
+  List,
+  PlusCircle,
+  AlertCircle,
+  BarChart2,
+  Search,
+  Filter,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { CiEdit } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import Swal from "sweetalert2"; 
-
-
-
-
+import Swal from "sweetalert2";
 
 const navItems = [
   { href: "/stock", icon: List, label: "Listado" },
@@ -22,8 +26,9 @@ const navItems = [
 export default function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
   const [mostrarInput, setMostrarInput] = useState(false);
+  const [mostrarInput1, setMostrarInput1] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -37,6 +42,7 @@ export default function ProductList() {
         const response = await axios.get("http://localhost:8000/products/all", {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
         console.log("✅ Productos recibidos:", response.data); // Verifica que los productos lleguen bien
         setProducts(response.data);
       } catch (error) {
@@ -49,9 +55,12 @@ export default function ProductList() {
     // Llamada a la API para obtener categorías
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/categories/all", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/categories/all",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         console.log("✅ Categorías recibidas:", response.data); // Verifica que las categorías lleguen bien
         setCategories(response.data);
       } catch (error) {
@@ -66,13 +75,12 @@ export default function ProductList() {
       console.error("Token not found");
     }
   }, [token]);
-  
-  
+
   // Filtrar productos por nombre
-  const filteredProducts = products.filter(product =>
-    product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.codigo.toString().toLowerCase().includes(searchTerm.toLowerCase())
-  
+  const filteredProducts = products.filter(
+    (product) =>
+      product.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.codigo.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -83,7 +91,6 @@ export default function ProductList() {
     );
   }
 
-
   const handleAgregarCategoria = async () => {
     if (!nuevaCategoria.trim()) {
       alert("El nombre de la categoría no puede estar vacío.");
@@ -92,43 +99,105 @@ export default function ProductList() {
 
     try {
       await axios.post(
-
-        "http://localhost:8000/categories/register", 
-        { name: nuevaCategoria },  
-        { headers: { Authorization: `Bearer ${token}` } } 
+        "http://localhost:8000/categories/register",
+        { name: nuevaCategoria },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       alert("Categoría agregada correctamente");
-      setNuevaCategoria(""); 
-      setMostrarInput(false); 
-
+      setNuevaCategoria("");
+      setMostrarInput(false);
     } catch (error) {
       console.error("Error al agregar categoría:", error);
       alert("Hubo un error al agregar la categoría.");
     }
   };
   const deleteCategory = (categoria_id) => {
-    console.log("ID de la categoría a eliminar:", categoria_id); 
+    console.log("ID de la categoría a eliminar:", categoria_id);
     if (!categoria_id) {
       console.error("ID de categoría no válido");
       return;
     }
-  
+
     axios
       .delete(`http://localhost:8000/categories/${categoria_id}`, {
-        headers: { Authorization: `Bearer ${token}` }, 
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         alert("Categoría eliminada correctamente");
-        
-        setCategories(prevCategories => prevCategories.filter(category => category.id !== categoria_id));
+
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category.id !== categoria_id)
+        );
       })
       .catch((error) => {
         console.error("Error al eliminar la categoría:", error);
         alert("Hubo un problema al eliminar la categoría.");
       });
   };
-  
+
+  const handleViewProduct = (product) => {
+    console.log("Product to view:", product); 
+    if (product && product.codigo) {
+      navigate(`/Stock/Vista/${product.codigo}`);
+    } else {
+      console.error("Invalid product ID");
+    }
+  };
+
+  const deleteProduct = async (codigo) => {
+    if (!codigo) {
+      console.error("ID de producto no válido");
+      return;
+    }
+
+    try {
+      const confirmDelete = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "No podrás revertir esto",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (!confirmDelete.isConfirmed) {
+        console.log("Eliminación cancelada");
+        return;
+      }
+
+      const response = await axios.delete(
+        `http://localhost:8000/products/${codigo}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("✅ Producto eliminado con éxito:", response.data);
+
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.codigo !== codigo)
+      );
+
+      await Swal.fire("Eliminado", "El producto ha sido eliminado.", "success");
+    } catch (error) {
+      console.error("❌ Error al eliminar el producto:", error);
+      Swal.fire("Error", "No se pudo eliminar el producto.", "error");
+    }
+  };
+ 
+
+  // const handleEditProduct = (product) => {
+  //   console.log("Product a editar:", product); 
+  //   if (product && product.codigo) {
+    
+  //     navigate(`/Stock/Edicion/${product.codigo}`);
+  //   } else {
+  //     console.error("Invalid product ID");
+  //   }
+  // };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -140,7 +209,11 @@ export default function ProductList() {
         </div>
         <nav className="p-4">
           {navItems.map((item) => (
-            <Link key={item.href} to={item.href} className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded">
+            <Link
+              key={item.href}
+              to={item.href}
+              className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded"
+            >
               <item.icon className="h-5 w-5 text-gray-600" />
               <span>{item.label}</span>
             </Link>
@@ -163,9 +236,8 @@ export default function ProductList() {
                 onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
                 className="border p-2 rounded w-64"
               />
-             
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border rounded-md">
+            <button className="flex items-center gap-2 px-4 py-2 bg-white border rounded-md mr-2">
               <Filter className="h-5 w-5" />
               Filtros
             </button>
@@ -190,7 +262,7 @@ export default function ProductList() {
                 />
 
                 <button
-                  className="ml-2 mr-2 px-4 py-2 bg-green-600 text-white rounded-md"
+                  className="ml-2 mr-2 px-4 py-2 bg-green-600 cursor-pointer text-white rounded-md"
                   onClick={handleAgregarCategoria}
                 >
                   Guardar
@@ -200,30 +272,28 @@ export default function ProductList() {
             <button className="cursor-pointer px-4 py-2 bg-yellow-600 text-white rounded-md mr-2">
               Editar Categoría
             </button>
-            
-              <div className="flex items-center gap-2">
-  <select
-    className="border p-2 rounded"
-    value={selectedCategory}
-    onChange={(e) => setSelectedCategory(e.target.value)}
-  >
-    <option value="">Seleccionar categoría</option>
-    {categories.map((category) => (
-      <option key={category.id} value={category.id}>
-        {category.name}
-      </option>
-    ))}
-  </select>
 
-  <button
-    className="px-4 py-2 bg-red-600 text-white rounded-md"
-    onClick={() => deleteCategory(selectedCategory)}
+            <div className="flex items-center gap-2">
+              <select
+                className="border p-2 rounded"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">Seleccionar categoría</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
 
-  >
-    Eliminar Categoría
-  </button>
-</div>
-             
+              <button
+                className="px-4 py-2 bg-red-600 cursor-pointer text-white rounded-md"
+                onClick={() => deleteCategory(selectedCategory)}
+              >
+                Eliminar Categoría
+              </button>
+            </div>
           </div>
         </div>
 
@@ -231,26 +301,54 @@ export default function ProductList() {
         <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Código
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Nombre
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Categoría
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Stock
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Precio
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Acciones
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredProducts.map((product) => (
               <tr key={product.codigo}>
-                <td className="px-6 py-4 whitespace-nowrap">{product.codigo}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{product.nombre}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{product.categoria?.name || "Sin categoría"}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {product.codigo}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {product.nombre}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {product.categoria?.name || "Sin categoría"}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{product.stock}</td>
-                <td className="px-6 py-4 whitespace-nowrap">${product.precio_venta}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  ${product.precio_venta}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap flex items-center">
-                  <button className="mr-4"><FaEye /></button>
-                  <button className="mr-4"><CiEdit /></button>
-                  <button onClick={EliminarProducto()}><MdDelete /> </button>
+                  <button
+                    className="mr-4"
+                    onClick={() => handleViewProduct(product)}
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button onClick={() => deleteProduct(product.codigo)}>
+                    {" "}
+                    <MdDelete />{" "}
+                  </button>
                 </td>
               </tr>
             ))}

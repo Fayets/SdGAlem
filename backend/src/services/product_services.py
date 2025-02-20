@@ -49,13 +49,27 @@ class ProductServices:
         with db_session:
             try:
                 product = models.Product.get(codigo=codigo)
+                print(codigo)
+                print(product)
                 if not product:
                     print("Producto no encontrado")
                     raise HTTPException(status_code=404, detail="Producto no encontrado")
                 
+                # Convertir producto a diccionario
                 product_dict = product.to_dict()
+
+                # Si la categoría existe, convertirla en un diccionario
+                if product.categoria:
+                    product_dict["categoria"] = {
+                        "id": product.categoria.id,
+                        "name": product.categoria.name
+                    }
+                else:
+                    product_dict["categoria"] = None
+                
                 print("Producto encontrado:", product_dict)  # Verifica que hay datos
                 return product_dict
+
             except Exception as e:
                 print(f"Error al obtener el producto: {e}")
                 raise HTTPException(status_code=500, detail="Error al obtener el producto")
